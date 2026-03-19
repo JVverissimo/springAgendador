@@ -4,6 +4,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
 
+import javax.xml.crypto.Data;
+
 import org.springframework.stereotype.Service;
 
 import com.verissimo.agendador_horarios.infrastruture.entity.SchedulingEntity;
@@ -37,6 +39,8 @@ public class SchedulingService {
     }
 
     public SchedulingEntity buscarAgendamento(LocalDate dataHoraInicio){
-        
+        LocalDateTime primeiraHoraDia =  dataHoraInicio.atStartOfDay();
+        LocalDateTime horaFinalDia = dataHoraInicio.atTime(23,59,59);
+        return schedulingRepository.findByDataHoraAgendamentoBetween(primeiraHoraDia, horaFinalDia);
     }
 }

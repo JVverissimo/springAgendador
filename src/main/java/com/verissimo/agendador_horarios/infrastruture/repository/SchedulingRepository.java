@@ -17,7 +17,7 @@ public interface SchedulingRepository extends JpaRepository<SchedulingEntity, Lo
     void deleteBySchedulingEntityClient(LocalDateTime dataHoraAgendamento, String cliente);
    
    
-    SchedulingEntity findByDataHoraAgendamentoBetween(LocalDataTime dataHoraInicial, LocalDataTime dataHoraFinal);
+    SchedulingEntity findByDataHoraAgendamentoBetween(LocalDateTime dataHoraInicial, LocalDateTime dataHoraFinal);
     
 
 }
