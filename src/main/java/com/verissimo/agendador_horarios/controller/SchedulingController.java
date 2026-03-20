@@ -1,5 +1,5 @@
 package com.verissimo.agendador_horarios.controller;
-
+import java.util.List;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 
@@ -41,8 +41,8 @@ public class SchedulingController {
         return ResponseEntity.noContent().build();
     }
 
-    @GetMapping
-    public ResponseEntity<SchedulingEntity> buscarAgendamento(@RequestParam LocalDate data){
+   @GetMapping
+    public ResponseEntity<List<SchedulingEntity>> buscarAgendamento(@RequestParam LocalDate data) {
         return ResponseEntity.ok().body(schedulingService.buscarAgendamento(data));
     }
 

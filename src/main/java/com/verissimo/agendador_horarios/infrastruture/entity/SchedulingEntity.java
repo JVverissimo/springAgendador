@@ -21,9 +21,6 @@ import lombok.Setter;
 @AllArgsConstructor
 @Entity
 @Table (name = "Scheduling")
-
-
-
 public class SchedulingEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
