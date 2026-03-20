@@ -3,9 +3,6 @@ package com.verissimo.agendador_horarios.service;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Objects;
-
-import javax.xml.crypto.Data;
-
 import org.springframework.stereotype.Service;
 
 import com.verissimo.agendador_horarios.infrastruture.entity.SchedulingEntity;
@@ -43,4 +40,14 @@ public class SchedulingService {
         LocalDateTime horaFinalDia = dataHoraInicio.atTime(23,59,59);
         return schedulingRepository.findByDataHoraAgendamentoBetween(primeiraHoraDia, horaFinalDia);
     }
+
+    public SchedulingEntity altereAgendamento( SchedulingEntity agendamento, String cliente, LocalDateTime dataHoraAgendamento) {
+        SchedulingEntity agenda = schedulingRepository.findBySchedulingEntityClient(agendamento, cliente, dataHoraAgendamento);
+        if(Objects.isNull(agenda)){
+            throw  new RuntimeException("Horário não exite");
+        }
+        agendamento.setId(agenda.getId());
+        return schedulingRepository.save(agendamento);
+    }
+
 }
