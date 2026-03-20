@@ -32,5 +32,4 @@ public class SchedulingEntity {
     private String telCliente;
     private LocalDateTime dataHoraAgendamento;
     private LocalDateTime  dataInsercao = LocalDateTime.now();
-
 }
