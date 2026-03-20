@@ -17,38 +17,40 @@ public class SchedulingService {
     private final SchedulingRepository schedulingRepository;
 
     public SchedulingEntity saveScheduling(SchedulingEntity entity) {
-        LocalDateTime horaAgendamento= entity.getDataHoraAgendamento();
-        LocalDateTime horaFim = entity.getDataHoraAgendamento().plusHours(1);
+        LocalDateTime horaAgendamento = entity.getDataHoraAgendamento();
+        LocalDateTime horaFim = horaAgendamento.plusHours(1);
 
-        SchedulingEntity agendados =  schedulingRepository.finByServiceSchedulingEntityBetween(entity.getServico(), horaAgendamento, horaFim);
+        // Busca se já existe algo nesse intervalo de 1 hora
+        SchedulingEntity agendado = schedulingRepository.findByDataHoraAgendamentoBetween(horaAgendamento, horaFim);
 
-
-        if (Objects.nonNull(agendados)){
+        if (Objects.nonNull(agendado)) {
             throw new RuntimeException("Horário já preenchido");     
         }
-        schedulingRepository.save(agendados);
 
+        // Salva apenas a nova entidade
         return schedulingRepository.save(entity);
     }
-    public void deleteSchedulingEntity(LocalDateTime datagHoraAgendamento, String client ){
-        schedulingRepository.deleteBySchedulingEntityClient(datagHoraAgendamento, client);
 
+    public void deleteSchedulingEntity(LocalDateTime dataHoraAgendamento, String client) {
+        schedulingRepository.deleteByClienteAndDataHoraAgendamento(client, dataHoraAgendamento);
     }
 
-    public SchedulingEntity buscarAgendamento(LocalDate dataHoraInicio){
-        LocalDateTime primeiraHoraDia =  dataHoraInicio.atStartOfDay();
-        LocalDateTime horaFinalDia = dataHoraInicio.atTime(23,59,59);
+    public SchedulingEntity buscarAgendamento(LocalDate data) {
+        LocalDateTime primeiraHoraDia = data.atStartOfDay();
+        LocalDateTime horaFinalDia = data.atTime(23, 59, 59);
         return schedulingRepository.findByDataHoraAgendamentoBetween(primeiraHoraDia, horaFinalDia);
     }
 
-    public SchedulingEntity altereAgendamento( SchedulingEntity agendamento, String cliente, LocalDateTime dataHoraAgendamento) {
-        SchedulingEntity agenda = schedulingRepository.findBySchedulingEntityClient(agendamento, cliente, dataHoraAgendamento);
-        if(Objects.isNull(agenda)){
-            throw  new RuntimeException("Horário não exite");
+    public SchedulingEntity altereAgendamento(SchedulingEntity agendamento, String cliente, LocalDateTime dataHoraAgendamento) {
+        // Busca o agendamento existente para obter o ID
+        SchedulingEntity agendaExistente = schedulingRepository.findByClienteAndDataHoraAgendamento(cliente, dataHoraAgendamento);
+        
+        if (Objects.isNull(agendaExistente)) {
+            throw new RuntimeException("Agendamento não encontrado para este cliente nesta data");
         }
-        agendamento.setId(agenda.getId());
+
+        // Mantém o ID original para realizar o UPDATE em vez de um novo INSERT
+        agendamento.setId(agendaExistente.getId());
         return schedulingRepository.save(agendamento);
-
     }
-
 }
