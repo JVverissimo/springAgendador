@@ -48,6 +48,7 @@ public class SchedulingService {
         }
         agendamento.setId(agenda.getId());
         return schedulingRepository.save(agendamento);
+
     }
 
 }
