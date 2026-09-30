@@ -1,0 +1,25 @@
+name: Primeiro Workflow Spring Boot
+
+on: [push]
+
+jobs:
+  execucao-de-tarefas:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixa o conteúdo do repositório
+      - name: Realizar checkout do código
+        uses: actions/checkout@v4
+
+      # 2. Segunda action: Configura o ambiente Java (ideal para o seu projeto)
+      - name: Configurar ambiente Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3. Rodar comandos simples no console
+      - name: Executar comandos e listar ficheiros
+        run: |
+          echo "Pipeline executada com sucesso no projeto Spring Boot!"
+          ls -la
