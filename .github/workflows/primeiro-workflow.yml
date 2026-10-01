@@ -1,1 +1,26 @@
+name: Primeiro Workflow
 
+on: [push]
+
+jobs:
+  execucao-de-tarefas:
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Baixar o conteúdo do repositório
+      - name: Baixar o conteudo do repositorio
+        uses: actions/checkout@v4
+
+      # 2. Configurar ambiente Java (Action oficial do GitHub Marketplace)
+      - name: Configurar ambiente Java
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+
+      # 3. Executar comandos simples no console
+      - name: Executar comandos e listar arquivos
+        run: |
+          echo "Pipeline executada com sucesso!"
+          echo "Listando arquivos do projeto:"
+          ls -la
